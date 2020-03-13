@@ -41,20 +41,19 @@ public class DesignTacoController {
         return "design";
     }
     @PostMapping
-    public String processDesign(){
+    public String processDesign(Taco design){
         //public String processDesign(Design design){
         //Save the Taco desig...
         //log.info("Processing design: " + design);
-        log.info("Processing design: " );
+        log.info("Processing design: "  + design);
         return "redirect:/orders/current";
 
     }
     private List<Ingredient> filterByType(
             List<Ingredient> ingredients, Type type) {
-         ingredients
+         return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
-        return ingredients;
     }
 }

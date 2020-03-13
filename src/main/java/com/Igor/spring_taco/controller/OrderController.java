@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Slf4j
 @Controller
-@RequestMapping ("/oreders")
+@RequestMapping ("/orders")
 public class OrderController {
     @GetMapping
     public String orderForm(Model model){
