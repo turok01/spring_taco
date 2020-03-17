@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Title</title>
+    <link rel="stylesheet" th:href="@{/styles.css}" />
+</head>
+<body>
+    <form method="POST" th:object="${tempstringdata}">
+        <div>
+            <input name="check" type="text" th:field="*{name}"/>
+            <span th:text="${get_attribute2}"></span>
+        </div>
+        <div>
+            <input name="check_num" type="checkbox" th:value=5>
+            <input name="check_num" type="checkbox" th:value="${tempstringdata.check_num}">
+            <input name="check_num" type="checkbox" th:value="${get_attribute3}">
+        </div>
+
+        <div>
+            <button>Submit</button>
+        </div>
+    </form>
+</body>
+</html>
