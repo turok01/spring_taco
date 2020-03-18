@@ -1,19 +1,24 @@
 package com.Igor.spring_taco.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-//import javax.validation.Valid;
+import com.Igor.spring_taco.Ingredient;
+import com.Igor.spring_taco.Ingredient.Type;
+import com.Igor.spring_taco.Taco;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import lombok.extern.slf4j.Slf4j;
-import com.Igor.spring_taco.Taco;
-import com.Igor.spring_taco.Ingredient;
-import com.Igor.spring_taco.Ingredient.Type;
+
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+//import javax.validation.Valid;
+
 @Slf4j
 @Controller
 @RequestMapping("/design")
@@ -41,10 +46,11 @@ public class DesignTacoController {
         return "design";
     }
     @PostMapping
-    public String processDesign(Taco design){
-        //public String processDesign(Design design){
+    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model){
+        if (errors.hasErrors()){
+            return "design";
+        }
         //Save the Taco desig...
-        //log.info("Processing design: " + design);
         log.info("Processing design: "  + design);
         return "redirect:/orders/current";
 
