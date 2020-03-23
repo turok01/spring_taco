@@ -2,16 +2,16 @@ package com.Igor.spring_taco.controller;
 
 import com.Igor.spring_taco.Ingredient;
 import com.Igor.spring_taco.Ingredient.Type;
+import com.Igor.spring_taco.Order;
 import com.Igor.spring_taco.Taco;
 import com.Igor.spring_taco.data.IngredientRepository;
+import com.Igor.spring_taco.data.TacoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -23,13 +23,30 @@ import java.util.stream.Collectors;
 @Slf4j
 @Controller
 @RequestMapping("/design")
+@SessionAttributes ("/order")
 public class DesignTacoController {
 
     private final IngredientRepository ingredientRepo;
 
-    public DesignTacoController(IngredientRepository ingredientRepo){
+    private TacoRepository designRepo;
+
+    @ModelAttribute(name = "order")
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
+    }
+
+
+    public DesignTacoController(IngredientRepository ingredientRepo,
+                                TacoRepository designRepo) {
+        this.designRepo = designRepo;
         this.ingredientRepo = ingredientRepo;
     }
+
     @GetMapping
     public String showDesignForm(Model model) {
         /*List<Ingredient> ingredients = Arrays.asList(
@@ -45,7 +62,7 @@ public class DesignTacoController {
                 new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
         );*/
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(i->ingredients.add(i));
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
             model.addAttribute(type.toString().toLowerCase(),
@@ -54,21 +71,24 @@ public class DesignTacoController {
         model.addAttribute("design", new Taco());
         return "design";
     }
+
     @PostMapping
-    public String processDesign(@Valid @ModelAttribute("design") Taco design, Errors errors, Model model){
-        if (errors.hasErrors()){
+    public String processinDesign(@Valid Taco design, Errors errors,
+                                  @ModelAttribute Order order) {
+        if (errors.hasErrors()) {
             return "design";
         }
-        //Save the Taco desig...
-        log.info("Processing design: "  + design);
+        Taco saved = designRepo.save(design);
+        order.addDesign(saved);
         return "redirect:/orders/current";
-
     }
+
     private List<Ingredient> filterByType(
             List<Ingredient> ingredients, Type type) {
-         return ingredients
+        return ingredients
                 .stream()
                 .filter(x -> x.getType().equals(type))
                 .collect(Collectors.toList());
     }
 }
+
