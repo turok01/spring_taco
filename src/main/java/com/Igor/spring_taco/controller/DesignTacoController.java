@@ -7,7 +7,6 @@ import com.Igor.spring_taco.Taco;
 import com.Igor.spring_taco.data.IngredientRepository;
 import com.Igor.spring_taco.data.TacoRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -43,8 +42,9 @@ public class DesignTacoController {
 
     public DesignTacoController(IngredientRepository ingredientRepo,
                                 TacoRepository designRepo) {
-        this.designRepo = designRepo;
         this.ingredientRepo = ingredientRepo;
+        this.designRepo = designRepo;
+
     }
 
     @GetMapping
@@ -68,7 +68,7 @@ public class DesignTacoController {
             model.addAttribute(type.toString().toLowerCase(),
                     filterByType(ingredients, type));
         }
-        model.addAttribute("design", new Taco());
+        //model.addAttribute("design", new Taco());
         return "design";
     }
 
