@@ -7,6 +7,7 @@ import com.Igor.spring_taco.Taco;
 import com.Igor.spring_taco.data.IngredientRepository;
 import com.Igor.spring_taco.data.TacoRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -39,7 +40,7 @@ public class DesignTacoController {
         return new Taco();
     }
 
-
+    @Autowired
     public DesignTacoController(IngredientRepository ingredientRepo,
                                 TacoRepository designRepo) {
         this.ingredientRepo = ingredientRepo;
@@ -73,7 +74,7 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processinDesign(@Valid Taco design, Errors errors,
+    public String processinDesign(@Valid  Taco design, Errors errors,
                                   @ModelAttribute Order order) {
         if (errors.hasErrors()) {
             return "design";
